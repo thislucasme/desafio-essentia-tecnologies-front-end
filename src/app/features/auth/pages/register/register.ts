@@ -11,6 +11,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth';
 import { Turnstile } from '../../../../shared/components/turnstile/turnstile';
@@ -29,6 +30,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     Turnstile,
   ],
   templateUrl: './register.html',
@@ -43,6 +45,8 @@ export class Register {
   readonly errorMessage = signal('');
   readonly isSubmitting = signal(false);
   readonly turnstileToken = signal('');
+  readonly hidePassword = signal(true);
+  readonly hideConfirmation = signal(true);
 
   readonly form = new FormGroup(
     {

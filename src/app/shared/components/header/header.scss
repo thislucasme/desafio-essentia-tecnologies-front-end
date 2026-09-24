@@ -24,8 +24,8 @@
 }
 
 .brand-logo {
-  width: 40px;
-  height: 40px;
+  width: 146px;
+  height: auto;
   object-fit: contain;
 }
 
@@ -78,9 +78,12 @@
     min-height: 64px;
   }
 
-  .brand span,
   .account-copy {
     display: none;
+  }
+
+  .brand-logo {
+    width: 128px;
   }
 
   .account {

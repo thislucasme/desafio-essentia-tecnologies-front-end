@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth';
 import { Turnstile } from '../../../../shared/components/turnstile/turnstile';
@@ -16,6 +17,7 @@ import { Turnstile } from '../../../../shared/components/turnstile/turnstile';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     Turnstile,
   ],
   templateUrl: './login.html',
@@ -30,6 +32,7 @@ export class Login {
   readonly errorMessage = signal('');
   readonly isSubmitting = signal(false);
   readonly turnstileToken = signal('');
+  readonly hidePassword = signal(true);
 
   readonly form = new FormGroup({
     email: new FormControl('', {
