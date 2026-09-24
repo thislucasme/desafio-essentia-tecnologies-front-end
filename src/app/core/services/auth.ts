@@ -9,10 +9,6 @@ export interface AuthUser {
   email: string;
 }
 
-interface StoredUser extends AuthUser {
-  passwordHash: string;
-}
-
 export interface RegisterData {
   name: string;
   email: string;
@@ -27,7 +23,6 @@ interface AuthResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly usersStorageKey = 'todo-users';
   private readonly sessionStorageKey = 'todo-session';
   private readonly tokenStorageKey = 'todo-access-token';
   private readonly currentUserState = signal<AuthUser | null>(this.loadSession());
@@ -42,19 +37,14 @@ export class AuthService {
     this.startSession(response.user, response.accessToken);
   }
 
-  async login(email: string, password: string): Promise<boolean> {
-    const normalizedEmail = email.trim().toLowerCase();
-    const passwordHash = await this.hashPassword(password);
-    const user = this.loadUsers().find(
-      (item) => item.email === normalizedEmail && item.passwordHash === passwordHash,
+  async login(email: string, password: string): Promise<void> {
+    const response = await firstValueFrom(
+      this.http.post<AuthResponse>(`${API_URL}/auth/login`, {
+        email: email.trim().toLowerCase(),
+        password,
+      }),
     );
-
-    if (!user) {
-      return false;
-    }
-
-    this.startSession(user);
-    return true;
+    this.startSession(response.user, response.accessToken);
   }
 
   logout(): void {
@@ -78,14 +68,6 @@ export class AuthService {
     this.currentUserState.set(session);
   }
 
-  private loadUsers(): StoredUser[] {
-    try {
-      return JSON.parse(localStorage.getItem(this.usersStorageKey) ?? '[]') as StoredUser[];
-    } catch {
-      return [];
-    }
-  }
-
   private loadSession(): AuthUser | null {
     try {
       const session = localStorage.getItem(this.sessionStorageKey);
@@ -93,11 +75,5 @@ export class AuthService {
     } catch {
       return null;
     }
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    const bytes = new TextEncoder().encode(password);
-    const hash = await crypto.subtle.digest('SHA-256', bytes);
-    return Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, '0')).join('');
   }
 }
