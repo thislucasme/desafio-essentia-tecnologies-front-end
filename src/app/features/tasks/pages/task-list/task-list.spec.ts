@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { TaskList } from './task-list';
 
@@ -11,7 +12,7 @@ describe('TaskList', () => {
 
     await TestBed.configureTestingModule({
       imports: [TaskList],
-      providers: [provideRouter([])],
+      providers: [provideHttpClient(), provideRouter([])],
     }).compileComponents();
   });
 

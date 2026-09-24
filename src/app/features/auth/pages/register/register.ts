@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   AbstractControl,
   FormControl,
@@ -60,14 +61,33 @@ export class Register {
     this.isSubmitting.set(true);
     this.errorMessage.set('');
     const { name, email, password } = this.form.getRawValue();
-    const success = await this.authService.register({ name, email, password });
-    this.isSubmitting.set(false);
+    try {
+      await this.authService.register({ name, email, password });
+      await this.router.navigate(['/']);
+    } catch (error) {
+      this.errorMessage.set(this.getErrorMessage(error));
+    } finally {
+      this.isSubmitting.set(false);
+    }
+  }
 
-    if (!success) {
-      this.errorMessage.set('Já existe uma conta cadastrada com este e-mail.');
-      return;
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      const message = error.error?.message;
+
+      if (Array.isArray(message)) {
+        return message.join(' ');
+      }
+
+      if (typeof message === 'string') {
+        return message;
+      }
+
+      if (error.status === 0) {
+        return 'Não foi possível conectar ao servidor. Tente novamente em instantes.';
+      }
     }
 
-    await this.router.navigate(['/']);
+    return 'Não foi possível criar sua conta. Tente novamente.';
   }
 }

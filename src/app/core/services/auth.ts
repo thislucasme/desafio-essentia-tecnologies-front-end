@@ -1,4 +1,7 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { API_URL } from '../config/api';
 
 export interface AuthUser {
   id: string;
@@ -16,33 +19,27 @@ export interface RegisterData {
   password: string;
 }
 
+interface AuthResponse {
+  accessToken: string;
+  user: AuthUser;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly http = inject(HttpClient);
   private readonly usersStorageKey = 'todo-users';
   private readonly sessionStorageKey = 'todo-session';
+  private readonly tokenStorageKey = 'todo-access-token';
   private readonly currentUserState = signal<AuthUser | null>(this.loadSession());
 
   readonly currentUser = this.currentUserState.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserState() !== null);
 
-  async register(data: RegisterData): Promise<boolean> {
-    const users = this.loadUsers();
-    const email = data.email.trim().toLowerCase();
-
-    if (users.some((user) => user.email === email)) {
-      return false;
-    }
-
-    const user: StoredUser = {
-      id: crypto.randomUUID(),
-      name: data.name.trim(),
-      email,
-      passwordHash: await this.hashPassword(data.password),
-    };
-
-    localStorage.setItem(this.usersStorageKey, JSON.stringify([...users, user]));
-    this.startSession(user);
-    return true;
+  async register(data: RegisterData): Promise<void> {
+    const response = await firstValueFrom(
+      this.http.post<AuthResponse>(`${API_URL}/auth/cadastro`, data),
+    );
+    this.startSession(response.user, response.accessToken);
   }
 
   async login(email: string, password: string): Promise<boolean> {
@@ -62,12 +59,22 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.sessionStorageKey);
+    localStorage.removeItem(this.tokenStorageKey);
     this.currentUserState.set(null);
   }
 
-  private startSession(user: AuthUser): void {
+  getAccessToken(): string | null {
+    return localStorage.getItem(this.tokenStorageKey);
+  }
+
+  private startSession(user: AuthUser, accessToken?: string): void {
     const session: AuthUser = { id: user.id, name: user.name, email: user.email };
     localStorage.setItem(this.sessionStorageKey, JSON.stringify(session));
+
+    if (accessToken) {
+      localStorage.setItem(this.tokenStorageKey, accessToken);
+    }
+
     this.currentUserState.set(session);
   }
 
