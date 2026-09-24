@@ -1,14 +1,140 @@
+.dialog-header {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 28px 28px 20px;
+}
+
+.dialog-heading {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.dialog-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  place-items: center;
+  color: #6255c4;
+  background: #eeecff;
+  border-radius: 12px;
+}
+
+.dialog-icon mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+
+.dialog-header h2 {
+  margin: 1px 0 5px;
+  color: #242235;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.dialog-header p {
+  max-width: 42ch;
+  margin: 0;
+  color: #747184;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dialog-header > button {
+  flex: none;
+  margin: -7px -7px 0 0;
+  color: #747184;
+}
+
+mat-dialog-content {
+  padding: 8px 28px 24px !important;
+}
+
 form {
   display: flex;
+  min-width: 480px;
   flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 112px;
+  max-height: 240px;
+}
+
+.status-option {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  background: #e6a23c;
+  border-radius: 50%;
+}
+
+.status-dot.progress {
+  background: #7c6ee6;
+}
+
+.status-dot.done {
+  background: #2f9e78;
+}
+
+mat-dialog-actions {
   gap: 8px;
-  min-width: 420px;
-  padding-top: 8px;
+  min-height: 72px;
+  padding: 14px 28px 20px !important;
+  border-top: 1px solid #efedf4;
+}
+
+mat-dialog-actions button {
+  min-height: 42px;
 }
 
 @media (max-width: 600px) {
+  .dialog-header {
+    padding: 22px 20px 16px;
+  }
+
+  .dialog-heading {
+    gap: 12px;
+  }
+
+  .dialog-icon {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .dialog-header h2 {
+    font-size: 20px;
+  }
+
+  .dialog-header p {
+    display: none;
+  }
+
+  mat-dialog-content {
+    padding: 8px 20px 20px !important;
+  }
+
   form {
-    min-width: 0;
     width: 100%;
+    min-width: 0;
+  }
+
+  mat-dialog-actions {
+    padding: 12px 20px 16px !important;
   }
 }

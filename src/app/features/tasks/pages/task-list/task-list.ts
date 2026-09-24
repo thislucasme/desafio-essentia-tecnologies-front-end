@@ -46,15 +46,17 @@ export class TaskList {
 
   openCreateDialog(): void {
     this.dialog.open(TaskDialog, {
-      width: '500px',
+      width: '560px',
       maxWidth: 'calc(100vw - 32px)',
+      panelClass: 'task-dialog-panel',
     });
   }
 
   openEditDialog(task: Task): void {
     this.dialog.open(TaskDialog, {
-      width: '500px',
+      width: '560px',
       maxWidth: 'calc(100vw - 32px)',
+      panelClass: 'task-dialog-panel',
       data: task,
     });
   }

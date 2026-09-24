@@ -33,6 +33,11 @@ html {
   outline-offset: 3px;
 }
 
+.task-dialog-panel .mat-mdc-dialog-surface {
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgb(45 38 91 / 20%);
+}
+
 body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the

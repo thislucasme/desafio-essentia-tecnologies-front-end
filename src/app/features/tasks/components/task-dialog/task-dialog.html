@@ -1,14 +1,46 @@
-<h2 mat-dialog-title>{{ isEditing ? 'Editar tarefa' : 'Nova tarefa' }}</h2>
+<div mat-dialog-title class="dialog-header">
+  <div class="dialog-heading">
+    <span class="dialog-icon" aria-hidden="true">
+      <mat-icon>{{ isEditing ? 'edit_note' : 'add_task' }}</mat-icon>
+    </span>
+
+    <div>
+      <h2>{{ isEditing ? 'Editar tarefa' : 'Nova tarefa' }}</h2>
+      <p>
+        {{
+          isEditing
+            ? 'Atualize as informações e mantenha sua lista organizada.'
+            : 'Registre o que precisa ser feito e acompanhe seu progresso.'
+        }}
+      </p>
+    </div>
+  </div>
+
+  <button mat-icon-button mat-dialog-close type="button" aria-label="Fechar dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 
 <mat-dialog-content>
   <form id="task-form" [formGroup]="form" (ngSubmit)="submit()">
     <mat-form-field appearance="outline">
       <mat-label>Título</mat-label>
 
-      <input matInput formControlName="title" placeholder="Ex: Estudar Angular" />
+      <input
+        matInput
+        formControlName="title"
+        placeholder="Ex: Estudar Angular"
+        maxlength="180"
+        autocomplete="off"
+        autofocus
+      />
+
+      <mat-hint align="end">{{ form.controls.title.value.length }}/180</mat-hint>
 
       @if (form.controls.title.hasError('required')) {
         <mat-error>O título é obrigatório.</mat-error>
+      } @else if (form.controls.title.hasError('maxlength')) {
+        <mat-error>O título deve ter no máximo 180 caracteres.</mat-error>
       }
     </mat-form-field>
 
@@ -18,20 +50,34 @@
       <textarea
         matInput
         formControlName="description"
-        rows="4"
-        placeholder="Descreva a tarefa"
+        rows="5"
+        maxlength="2000"
+        placeholder="Adicione detalhes, contexto ou próximos passos"
       ></textarea>
+
+      <mat-hint>Opcional</mat-hint>
+      <mat-hint align="end">{{ form.controls.description.value.length }}/2000</mat-hint>
+
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>A descrição deve ter no máximo 2.000 caracteres.</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Status</mat-label>
 
       <mat-select formControlName="status">
-        <mat-option value="PENDING"> Pendente </mat-option>
+        <mat-option value="PENDING">
+          <span class="status-option"><span class="status-dot pending"></span>Pendente</span>
+        </mat-option>
 
-        <mat-option value="IN_PROGRESS"> Em andamento </mat-option>
+        <mat-option value="IN_PROGRESS">
+          <span class="status-option"><span class="status-dot progress"></span>Em andamento</span>
+        </mat-option>
 
-        <mat-option value="DONE"> Concluída </mat-option>
+        <mat-option value="DONE">
+          <span class="status-option"><span class="status-dot done"></span>Concluída</span>
+        </mat-option>
       </mat-select>
     </mat-form-field>
   </form>
@@ -41,6 +87,7 @@
   <button mat-button mat-dialog-close>Cancelar</button>
 
   <button mat-flat-button type="submit" form="task-form">
+    <mat-icon>{{ isEditing ? 'save' : 'add' }}</mat-icon>
     {{ isEditing ? 'Salvar alterações' : 'Criar tarefa' }}
   </button>
 </mat-dialog-actions>

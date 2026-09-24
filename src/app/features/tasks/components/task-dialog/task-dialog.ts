@@ -11,6 +11,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TaskService } from '../../../../core/services/task';
 import { Task, TaskStatus } from '../../models/task';
@@ -26,6 +27,7 @@ import { Task, TaskStatus } from '../../models/task';
     MatDialogTitle,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     MatSelectModule,
   ],
   templateUrl: './task-dialog.html',
@@ -40,11 +42,12 @@ export class TaskDialog {
   readonly form = new FormGroup({
     title: new FormControl(this.task?.title ?? '', {
       nonNullable: true,
-      validators: [Validators.required],
+      validators: [Validators.required, Validators.maxLength(180)],
     }),
 
     description: new FormControl(this.task?.description ?? '', {
       nonNullable: true,
+      validators: [Validators.maxLength(2000)],
     }),
 
     status: new FormControl<TaskStatus>(this.task?.status ?? 'PENDING', {
