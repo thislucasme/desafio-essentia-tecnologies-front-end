@@ -1,0 +1,86 @@
+.auth-page {
+  min-height: calc(100dvh - 64px);
+  padding: 48px 20px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+.auth-panel {
+  width: min(100%, 440px);
+  padding: 32px;
+  box-sizing: border-box;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 16px 45px rgb(15 23 42 / 12%);
+}
+
+.auth-intro {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.auth-logo {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  object-fit: contain;
+}
+
+h1 {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.auth-intro p,
+.auth-switch {
+  color: #64748b;
+}
+
+.auth-intro p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+form > button {
+  min-height: 44px;
+  margin-top: 4px;
+}
+
+.form-error {
+  margin: -2px 0 8px;
+  color: #b91c1c;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.auth-switch {
+  margin: 24px 0 0;
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #1d4ed8;
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .auth-page {
+    padding: 24px 16px;
+    place-items: start center;
+  }
+
+  .auth-panel {
+    padding: 24px 20px;
+  }
+}

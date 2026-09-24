@@ -1,0 +1,14 @@
+mat-dialog-content {
+  max-width: 440px;
+}
+
+p {
+  margin: 0;
+  color: #625f70;
+  line-height: 1.6;
+}
+
+.delete-button {
+  --mat-button-filled-container-color: #b42318;
+  --mat-button-filled-label-text-color: #ffffff;
+}

@@ -1,0 +1,19 @@
+<header class="header">
+  <div class="header-content">
+    <a class="brand" routerLink="/" aria-label="Ir para minhas tarefas">
+      <img class="brand-logo" src="/logo.png" alt="" />
+      <span>Minha Lista</span>
+    </a>
+
+    @if (currentUser(); as user) {
+      <div class="account">
+        <span class="avatar" aria-hidden="true">{{ user.name.charAt(0).toUpperCase() }}</span>
+        <div class="account-copy">
+          <strong>{{ user.name }}</strong>
+          <span>{{ user.email }}</span>
+        </div>
+        <button mat-button type="button" (click)="logout()">Sair</button>
+      </div>
+    }
+  </div>
+</header>

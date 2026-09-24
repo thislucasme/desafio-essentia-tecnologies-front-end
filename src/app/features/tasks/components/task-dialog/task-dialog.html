@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Editar tarefa' : 'Nova tarefa' }}</h2>
+
+<mat-dialog-content>
+  <form id="task-form" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Título</mat-label>
+
+      <input matInput formControlName="title" placeholder="Ex: Estudar Angular" />
+
+      @if (form.controls.title.hasError('required')) {
+        <mat-error>O título é obrigatório.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Descrição</mat-label>
+
+      <textarea
+        matInput
+        formControlName="description"
+        rows="4"
+        placeholder="Descreva a tarefa"
+      ></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+
+      <mat-select formControlName="status">
+        <mat-option value="PENDING"> Pendente </mat-option>
+
+        <mat-option value="IN_PROGRESS"> Em andamento </mat-option>
+
+        <mat-option value="DONE"> Concluída </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+
+  <button mat-flat-button type="submit" form="task-form">
+    {{ isEditing ? 'Salvar alterações' : 'Criar tarefa' }}
+  </button>
+</mat-dialog-actions>

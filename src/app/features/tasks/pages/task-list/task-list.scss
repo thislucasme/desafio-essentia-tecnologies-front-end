@@ -1,0 +1,278 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  background: #f8f8fb;
+}
+
+.task-page {
+  width: min(100% - 48px, 960px);
+  margin: 0 auto;
+  padding: 56px 0 80px;
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.page-heading h1 {
+  margin: 0 0 6px;
+  color: #242235;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.page-heading p {
+  margin: 0;
+  color: #747184;
+  font-size: 15px;
+}
+
+.page-heading button,
+.empty-state button {
+  min-height: 44px;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-item {
+  display: flex;
+  overflow: hidden;
+  min-height: 112px;
+  background: #ffffff;
+  border: 1px solid #e8e7f0;
+  border-radius: 14px;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.task-item:hover {
+  border-color: #cfcaef;
+  box-shadow: 0 10px 30px rgb(69 61 122 / 9%);
+  transform: translateY(-1px);
+}
+
+.status-marker {
+  width: 5px;
+  flex: 0 0 5px;
+  background: #e6a23c;
+}
+
+.status-marker.pending {
+  background: #e6a23c;
+}
+
+.status-marker.in_progress {
+  background: #7c6ee6;
+}
+
+.status-marker.done {
+  background: #2f9e78;
+}
+
+.task-content {
+  min-width: 0;
+  flex: 1;
+  padding: 22px 24px;
+}
+
+.task-title-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.task-title-row h2 {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: #2c293a;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.task-content p {
+  max-width: 70ch;
+  margin: 8px 0 14px;
+  color: #625f70;
+  line-height: 1.55;
+}
+
+.task-content .no-description {
+  color: #9692a1;
+  font-style: italic;
+}
+
+.task-content time {
+  color: #8a8796;
+  font-size: 12px;
+}
+
+.task-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin: 18px -8px -6px;
+  padding-top: 12px;
+  border-top: 1px solid #efedf4;
+}
+
+.task-actions button {
+  color: #5b576a;
+}
+
+.task-actions button:first-child {
+  color: #5547b0;
+}
+
+.task-actions .delete-action {
+  margin-left: auto;
+  color: #a33a31;
+}
+
+.status {
+  flex: none;
+  padding: 5px 10px;
+  color: #8a4b08;
+  font-size: 12px;
+  font-weight: 600;
+  background: #fff1d6;
+  border-radius: 999px;
+}
+
+.status.pending {
+  color: #8a4b08;
+  background: #fff1d6;
+}
+
+.status.in_progress {
+  color: #5547b0;
+  background: #efedff;
+}
+
+.status.done {
+  color: #187153;
+  background: #e5f6ef;
+}
+
+.empty-state {
+  padding: 72px 24px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed #d7d3e4;
+  border-radius: 16px;
+}
+
+.empty-icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  place-items: center;
+  color: #6255c4;
+  background: #eeecff;
+  border-radius: 14px;
+}
+
+.empty-icon mat-icon {
+  width: 28px;
+  height: 28px;
+  font-size: 28px;
+}
+
+.empty-state h2 {
+  margin: 0 0 8px;
+  color: #2c293a;
+  font-size: 20px;
+}
+
+.empty-state p {
+  max-width: 48ch;
+  margin: 0 auto 24px;
+  color: #747184;
+  line-height: 1.55;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e8e7f0;
+}
+
+.pagination span {
+  color: #747184;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagination button {
+  color: #5547b0;
+}
+
+@media (max-width: 600px) {
+  .task-page {
+    width: min(100% - 32px, 960px);
+    padding: 32px 0 56px;
+  }
+
+  .page-heading {
+    gap: 20px;
+    align-items: stretch;
+    flex-direction: column;
+    margin-bottom: 24px;
+  }
+
+  .page-heading button {
+    width: 100%;
+  }
+
+  .task-content {
+    padding: 18px;
+  }
+
+  .task-title-row {
+    gap: 10px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .task-content p {
+    margin-bottom: 12px;
+  }
+
+  .task-actions {
+    flex-wrap: wrap;
+  }
+
+  .task-actions button:not(.delete-action) {
+    padding-inline: 8px;
+    font-size: 13px;
+  }
+
+  .empty-state {
+    padding: 48px 20px;
+  }
+
+  .pagination {
+    margin-top: 18px;
+  }
+
+  .pagination button {
+    min-width: auto;
+    padding-inline: 8px;
+  }
+}

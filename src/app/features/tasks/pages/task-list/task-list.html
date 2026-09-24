@@ -1,0 +1,103 @@
+<app-header />
+
+<main class="task-page">
+  <section class="page-heading" aria-labelledby="page-title">
+    <div>
+      <h1 id="page-title">Minhas tarefas</h1>
+      <p>
+        @if (tasks().length === 1) {
+          1 tarefa cadastrada
+        } @else {
+          {{ tasks().length }} tarefas cadastradas
+        }
+      </p>
+    </div>
+
+    <button mat-flat-button type="button" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Nova tarefa
+    </button>
+  </section>
+
+  <section class="task-list" aria-label="Lista de tarefas">
+    @for (task of paginatedTasks(); track task.id) {
+      <article class="task-item">
+        <span class="status-marker" [class]="'status-marker ' + task.status.toLowerCase()"></span>
+
+        <div class="task-content">
+          <div class="task-title-row">
+            <h2>{{ task.title }}</h2>
+            <span class="status" [class]="'status ' + task.status.toLowerCase()">
+              {{ statusLabels[task.status] }}
+            </span>
+          </div>
+
+          @if (task.description) {
+            <p>{{ task.description }}</p>
+          } @else {
+            <p class="no-description">Sem descrição</p>
+          }
+
+          <time [attr.datetime]="task.createdAt">
+            Criada em {{ task.createdAt | date: 'dd/MM/yyyy' }}
+          </time>
+
+          <div class="task-actions">
+            <button mat-button type="button" (click)="advanceStatus(task)">
+              <mat-icon>{{ task.status === 'DONE' ? 'refresh' : 'check_circle' }}</mat-icon>
+              {{ statusActionLabel(task.status) }}
+            </button>
+
+            <button mat-button type="button" (click)="openEditDialog(task)">
+              <mat-icon>edit</mat-icon>
+              Editar
+            </button>
+
+            <button
+              mat-icon-button
+              class="delete-action"
+              type="button"
+              [attr.aria-label]="'Excluir tarefa ' + task.title"
+              (click)="deleteTask(task)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <div class="empty-icon" aria-hidden="true">
+          <mat-icon>checklist</mat-icon>
+        </div>
+        <h2>Sua lista está pronta</h2>
+        <p>Crie a primeira tarefa para começar a organizar o que precisa ser feito.</p>
+        <button mat-flat-button type="button" (click)="openCreateDialog()">
+          <mat-icon>add</mat-icon>
+          Criar primeira tarefa
+        </button>
+      </div>
+    }
+  </section>
+
+  @if (tasks().length > 0) {
+    <nav class="pagination" aria-label="Paginação das tarefas">
+      <button mat-button type="button" [disabled]="currentPage() === 1" (click)="previousPage()">
+        <mat-icon>chevron_left</mat-icon>
+        Anterior
+      </button>
+
+      <span aria-live="polite">Página {{ currentPage() }} de {{ totalPages() }}</span>
+
+      <button
+        mat-button
+        type="button"
+        [disabled]="currentPage() === totalPages()"
+        (click)="nextPage()"
+      >
+        Próxima
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </nav>
+  }
+</main>
