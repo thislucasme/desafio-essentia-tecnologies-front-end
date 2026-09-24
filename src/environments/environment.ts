@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://desafio-essentia-tecnologies-front.vercel.app/api',
+  apiUrl: 'https://desafioessentiatecnologies.duckdns.org:4178/api',
 } as const;
