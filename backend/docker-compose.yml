@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: todo-list-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: todo_list
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todolist1234_
+      MYSQL_ROOT_PASSWORD: todolist1234_
+    ports:
+      - "3309:3306"
+    volumes:
+      - todo-list-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  todo-list-mysql-data:
