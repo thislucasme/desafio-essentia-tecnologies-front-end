@@ -1,15 +1,20 @@
 .dialog-header {
   display: flex;
   gap: 24px;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   padding: 28px 28px 20px;
+}
+
+.dialog-header::before {
+  display: none;
 }
 
 .dialog-heading {
   display: flex;
   gap: 16px;
-  align-items: flex-start;
+  min-width: 0;
+  align-items: center;
 }
 
 .dialog-icon {
@@ -30,7 +35,7 @@
 }
 
 .dialog-header h2 {
-  margin: 1px 0 5px;
+  margin: 0 0 4px;
   color: #242235;
   font-size: 22px;
   font-weight: 700;
@@ -48,7 +53,7 @@
 
 .dialog-header > button {
   flex: none;
-  margin: -7px -7px 0 0;
+  margin-right: -7px;
   color: #747184;
 }
 
