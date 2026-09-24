@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { API_URL } from '../config/api';
+import { ACCESS_TOKEN_STORAGE_KEY } from '../constants/auth';
 
 export interface AuthUser {
   id: string;
@@ -24,7 +25,6 @@ interface AuthResponse {
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly sessionStorageKey = 'todo-session';
-  private readonly tokenStorageKey = 'todo-access-token';
   private readonly currentUserState = signal<AuthUser | null>(this.loadSession());
 
   readonly currentUser = this.currentUserState.asReadonly();
@@ -49,12 +49,12 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.sessionStorageKey);
-    localStorage.removeItem(this.tokenStorageKey);
+    localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
     this.currentUserState.set(null);
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem(this.tokenStorageKey);
+    return localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
   }
 
   private startSession(user: AuthUser, accessToken?: string): void {
@@ -62,7 +62,7 @@ export class AuthService {
     localStorage.setItem(this.sessionStorageKey, JSON.stringify(session));
 
     if (accessToken) {
-      localStorage.setItem(this.tokenStorageKey, accessToken);
+      localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, accessToken);
     }
 
     this.currentUserState.set(session);

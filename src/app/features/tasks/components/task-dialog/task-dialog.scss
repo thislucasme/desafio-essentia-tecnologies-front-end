@@ -91,6 +91,16 @@ textarea {
   background: #2f9e78;
 }
 
+.dialog-error {
+  margin: 0;
+  padding: 10px 12px;
+  color: #9f2d24;
+  font-size: 13px;
+  line-height: 1.45;
+  background: #fff0ee;
+  border-radius: 8px;
+}
+
 mat-dialog-actions {
   gap: 8px;
   min-height: 72px;

@@ -1,93 +1,78 @@
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { CreateTask, Task, TaskStatus, UpdateTask } from '../../features/tasks/models/task';
-import { AuthService } from './auth';
+import { API_URL } from '../config/api';
 
-@Injectable({
-  providedIn: 'root',
-})
+interface PaginationMeta {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+interface PaginatedTasksResponse {
+  data: Task[];
+  meta: PaginationMeta;
+}
+
+@Injectable({ providedIn: 'root' })
 export class TaskService {
-  private readonly authService = inject(AuthService);
+  private readonly http = inject(HttpClient);
 
-  readonly tasks = signal<Task[]>(this.loadTasks());
+  readonly tasks = signal<Task[]>([]);
+  readonly totalItems = signal(0);
+  readonly totalPages = signal(1);
+  readonly isLoading = signal(false);
+  readonly errorMessage = signal('');
 
-  constructor() {
-    effect(() => {
-      this.authService.currentUser();
-      this.tasks.set(this.loadTasks());
-    });
-  }
-
-  create(data: CreateTask): void {
-    const now = new Date().toISOString();
-
-    const task: Task = {
-      id: crypto.randomUUID(),
-      ...data,
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    this.tasks.update((tasks) => [task, ...tasks]);
-
-    this.saveTasks();
-  }
-
-  update(id: string, data: UpdateTask): void {
-    this.tasks.update((tasks) =>
-      tasks.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              ...data,
-              updatedAt: new Date().toISOString(),
-            }
-          : task,
-      ),
-    );
-
-    this.saveTasks();
-  }
-
-  delete(id: string): void {
-    this.tasks.update((tasks) => tasks.filter((task) => task.id !== id));
-
-    this.saveTasks();
-  }
-
-  changeStatus(id: string, status: TaskStatus): void {
-    this.update(id, { status });
-  }
-
-  private saveTasks(): void {
-    const storageKey = this.getStorageKey();
-
-    if (storageKey) {
-      localStorage.setItem(storageKey, JSON.stringify(this.tasks()));
-    }
-  }
-
-  private loadTasks(): Task[] {
-    const storageKey = this.getStorageKey();
-
-    if (!storageKey) {
-      return [];
-    }
-
-    const tasks = localStorage.getItem(storageKey);
-
-    if (!tasks) {
-      return [];
-    }
+  async findAll(page = 1, limit = 2): Promise<void> {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
 
     try {
-      return JSON.parse(tasks) as Task[];
-    } catch {
-      return [];
+      const params = new HttpParams().set('page', page).set('limit', limit);
+      const response = await firstValueFrom(
+        this.http.get<PaginatedTasksResponse>(`${API_URL}/tarefas`, { params }),
+      );
+      this.tasks.set(response.data);
+      this.totalItems.set(response.meta.totalItems);
+      this.totalPages.set(response.meta.totalPages);
+    } catch (error) {
+      this.tasks.set([]);
+      this.errorMessage.set(this.getErrorMessage(error));
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
-  private getStorageKey(): string | null {
-    const user = this.authService.currentUser();
-    return user ? `tasks-${user.id}` : null;
+  create(data: CreateTask): Promise<Task> {
+    return firstValueFrom(this.http.post<Task>(`${API_URL}/tarefas`, data));
+  }
+
+  async update(id: string, data: UpdateTask): Promise<Task> {
+    const task = await firstValueFrom(this.http.patch<Task>(`${API_URL}/tarefas/${id}`, data));
+    this.tasks.update((tasks) => tasks.map((item) => (item.id === id ? task : item)));
+    return task;
+  }
+
+  delete(id: string): Promise<void> {
+    return firstValueFrom(this.http.delete<void>(`${API_URL}/tarefas/${id}`));
+  }
+
+  changeStatus(id: string, status: TaskStatus): Promise<Task> {
+    return this.update(id, { status });
+  }
+
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      if (error.status === 0) return 'Não foi possível conectar ao servidor.';
+
+      const message = error.error?.message;
+      if (Array.isArray(message)) return message.join(' ');
+      if (typeof message === 'string') return message;
+    }
+
+    return 'Não foi possível carregar suas tarefas.';
   }
 }

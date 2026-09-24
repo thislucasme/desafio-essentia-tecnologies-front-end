@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -38,6 +39,8 @@ export class TaskDialog {
   private readonly dialogRef = inject(MatDialogRef<TaskDialog>);
   readonly task = inject<Task | null>(MAT_DIALOG_DATA, { optional: true });
   readonly isEditing = this.task !== null;
+  readonly isSubmitting = signal(false);
+  readonly errorMessage = signal('');
 
   readonly form = new FormGroup({
     title: new FormControl(this.task?.title ?? '', {
@@ -56,18 +59,32 @@ export class TaskDialog {
     }),
   });
 
-  submit(): void {
+  async submit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    if (this.task) {
-      this.taskService.update(this.task.id, this.form.getRawValue());
-    } else {
-      this.taskService.create(this.form.getRawValue());
-    }
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
 
-    this.dialogRef.close(true);
+    try {
+      if (this.task) {
+        await this.taskService.update(this.task.id, this.form.getRawValue());
+      } else {
+        await this.taskService.create(this.form.getRawValue());
+      }
+
+      this.dialogRef.close(true);
+    } catch (error) {
+      const message = error instanceof HttpErrorResponse ? error.error?.message : null;
+      this.errorMessage.set(
+        typeof message === 'string'
+          ? message
+          : 'Não foi possível salvar a tarefa. Tente novamente.',
+      );
+    } finally {
+      this.isSubmitting.set(false);
+    }
   }
 }

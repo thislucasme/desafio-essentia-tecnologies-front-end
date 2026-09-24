@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,48 +16,49 @@ import { Task, TaskStatus } from '../../models/task';
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
-export class TaskList {
+export class TaskList implements OnInit {
   private readonly taskService = inject(TaskService);
   private readonly dialog = inject(MatDialog);
 
   readonly tasks = this.taskService.tasks;
+  readonly totalItems = this.taskService.totalItems;
+  readonly totalPages = this.taskService.totalPages;
+  readonly isLoading = this.taskService.isLoading;
+  readonly errorMessage = this.taskService.errorMessage;
   readonly pageSize = 2;
   readonly currentPage = signal(1);
-  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.tasks().length / this.pageSize)));
-  readonly paginatedTasks = computed(() => {
-    const start = (this.currentPage() - 1) * this.pageSize;
-    return this.tasks().slice(start, start + this.pageSize);
-  });
   readonly statusLabels: Record<TaskStatus, string> = {
     PENDING: 'Pendente',
     IN_PROGRESS: 'Em andamento',
     DONE: 'Concluída',
   };
 
-  constructor() {
-    effect(() => {
-      const lastPage = this.totalPages();
-
-      if (this.currentPage() > lastPage) {
-        this.currentPage.set(lastPage);
-      }
-    });
+  ngOnInit(): void {
+    void this.loadPage(1);
   }
 
   openCreateDialog(): void {
-    this.dialog.open(TaskDialog, {
+    const dialogRef = this.dialog.open(TaskDialog, {
       width: '560px',
       maxWidth: 'calc(100vw - 32px)',
       panelClass: 'task-dialog-panel',
+    });
+
+    dialogRef.afterClosed().subscribe((saved) => {
+      if (saved) void this.loadPage(1);
     });
   }
 
   openEditDialog(task: Task): void {
-    this.dialog.open(TaskDialog, {
+    const dialogRef = this.dialog.open(TaskDialog, {
       width: '560px',
       maxWidth: 'calc(100vw - 32px)',
       panelClass: 'task-dialog-panel',
       data: task,
+    });
+
+    dialogRef.afterClosed().subscribe((saved) => {
+      if (saved) void this.loadPage(this.currentPage());
     });
   }
 
@@ -68,21 +69,24 @@ export class TaskList {
       data: task,
     });
 
-    dialogRef.afterClosed().subscribe((confirmed) => {
+    dialogRef.afterClosed().subscribe(async (confirmed) => {
       if (confirmed) {
-        this.taskService.delete(task.id);
+        await this.taskService.delete(task.id);
+        const destinationPage =
+          this.tasks().length === 1 ? Math.max(1, this.currentPage() - 1) : this.currentPage();
+        await this.loadPage(destinationPage);
       }
     });
   }
 
-  advanceStatus(task: Task): void {
+  async advanceStatus(task: Task): Promise<void> {
     const nextStatus: Record<TaskStatus, TaskStatus> = {
       PENDING: 'IN_PROGRESS',
       IN_PROGRESS: 'DONE',
       DONE: 'PENDING',
     };
 
-    this.taskService.changeStatus(task.id, nextStatus[task.status]);
+    await this.taskService.changeStatus(task.id, nextStatus[task.status]);
   }
 
   statusActionLabel(status: TaskStatus): string {
@@ -96,10 +100,15 @@ export class TaskList {
   }
 
   previousPage(): void {
-    this.currentPage.update((page) => Math.max(1, page - 1));
+    void this.loadPage(Math.max(1, this.currentPage() - 1));
   }
 
   nextPage(): void {
-    this.currentPage.update((page) => Math.min(this.totalPages(), page + 1));
+    void this.loadPage(Math.min(this.totalPages(), this.currentPage() + 1));
+  }
+
+  loadPage(page: number): Promise<void> {
+    this.currentPage.set(page);
+    return this.taskService.findAll(page, this.pageSize);
   }
 }

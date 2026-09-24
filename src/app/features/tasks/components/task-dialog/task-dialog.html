@@ -81,13 +81,17 @@
       </mat-select>
     </mat-form-field>
   </form>
+
+  @if (errorMessage()) {
+    <p class="dialog-error" role="alert">{{ errorMessage() }}</p>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancelar</button>
 
-  <button mat-flat-button type="submit" form="task-form">
+  <button mat-flat-button type="submit" form="task-form" [disabled]="isSubmitting()">
     <mat-icon>{{ isEditing ? 'save' : 'add' }}</mat-icon>
-    {{ isEditing ? 'Salvar alterações' : 'Criar tarefa' }}
+    {{ isSubmitting() ? 'Salvando...' : isEditing ? 'Salvar alterações' : 'Criar tarefa' }}
   </button>
 </mat-dialog-actions>
