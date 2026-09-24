@@ -38,15 +38,23 @@
     } @else {
       @for (task of tasks(); track task.id) {
         <article class="task-item">
-          <span class="status-marker" [class]="'status-marker ' + task.status.toLowerCase()"></span>
+          <button
+            class="status-control"
+            [class]="'status-control ' + task.status.toLowerCase()"
+            type="button"
+            [attr.aria-label]="statusActionLabel(task.status) + ': ' + task.title"
+            [attr.title]="statusActionLabel(task.status)"
+            (click)="advanceStatus(task)"
+          >
+            @if (task.status === 'DONE') {
+              <mat-icon>check</mat-icon>
+            } @else {
+              <span class="status-control-dot" aria-hidden="true"></span>
+            }
+          </button>
 
           <div class="task-content">
-            <div class="task-title-row">
-              <h2>{{ task.title }}</h2>
-              <span class="status" [class]="'status ' + task.status.toLowerCase()">
-                {{ statusLabels[task.status] }}
-              </span>
-            </div>
+            <h2 [class.completed]="task.status === 'DONE'">{{ task.title }}</h2>
 
             @if (task.description) {
               <p>{{ task.description }}</p>
@@ -54,31 +62,38 @@
               <p class="no-description">Sem descrição</p>
             }
 
-            <time [attr.datetime]="task.createdAt">
-              Criada em {{ task.createdAt | date: 'dd/MM/yyyy' }}
-            </time>
-
-            <div class="task-actions">
-              <button mat-button type="button" (click)="advanceStatus(task)">
-                <mat-icon>{{ task.status === 'DONE' ? 'refresh' : 'check_circle' }}</mat-icon>
-                {{ statusActionLabel(task.status) }}
-              </button>
-
-              <button mat-button type="button" (click)="openEditDialog(task)">
-                <mat-icon>edit</mat-icon>
-                Editar
-              </button>
-
-              <button
-                mat-icon-button
-                class="delete-action"
-                type="button"
-                [attr.aria-label]="'Excluir tarefa ' + task.title"
-                (click)="deleteTask(task)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
+            <div class="task-meta">
+              <span class="status" [class]="'status ' + task.status.toLowerCase()">
+                {{ statusLabels[task.status] }}
+              </span>
+              <span class="meta-separator" aria-hidden="true"></span>
+              <time [attr.datetime]="task.createdAt">
+                {{ task.createdAt | date: 'dd/MM/yyyy' }}
+              </time>
             </div>
+          </div>
+
+          <div class="task-actions">
+            <button
+              mat-icon-button
+              type="button"
+              [attr.aria-label]="'Editar tarefa ' + task.title"
+              title="Editar tarefa"
+              (click)="openEditDialog(task)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button
+              mat-icon-button
+              class="delete-action"
+              type="button"
+              [attr.aria-label]="'Excluir tarefa ' + task.title"
+              title="Excluir tarefa"
+              (click)="deleteTask(task)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
           </div>
         </article>
       } @empty {
