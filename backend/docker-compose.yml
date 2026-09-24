@@ -13,7 +13,7 @@ services:
     volumes:
       - todo-list-mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot_password"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ptodolist1234_"]
       interval: 5s
       timeout: 5s
       retries: 10
