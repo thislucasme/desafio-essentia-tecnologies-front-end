@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
-import { TaskService } from '../../../../core/services/task';
+import { TaskService } from '../../../../core/services/task.service';
 import { Header } from '../../../../shared/components/header/header';
 import { TaskDeleteDialog } from '../../components/task-delete-dialog/task-delete-dialog';
 import { TaskDialog } from '../../components/task-dialog/task-dialog';
