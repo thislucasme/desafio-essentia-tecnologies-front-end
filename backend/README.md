@@ -28,6 +28,19 @@ npm run start:dev
 
 A API estará disponível em `http://localhost:3000/api` e a documentação Swagger em `http://localhost:3000/api/docs`.
 
+## Cloudflare Turnstile
+
+Cadastro e login exigem um token do Cloudflare Turnstile. Em desenvolvimento, o
+`.env.example` utiliza a chave secreta oficial de teste da Cloudflare. Em produção,
+configure no ambiente do backend:
+
+```text
+TURNSTILE_SECRET_KEY=SEU_SECRET_DO_TURNSTILE
+```
+
+O secret é privado e nunca deve ser adicionado ao frontend ou enviado ao Git. A
+chave pública do widget fica nos arquivos `src/environments` do frontend.
+
 ## Autenticação
 
 Depois de fazer cadastro ou login, envie o token retornado nas rotas protegidas:

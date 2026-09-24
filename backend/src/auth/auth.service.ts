@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcryptjs';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
+import { TurnstileService } from '../common/services/turnstile.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
@@ -19,9 +20,11 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
+    private readonly turnstileService: TurnstileService,
   ) {}
 
-  async register(dto: RegisterDto): Promise<AuthResponse> {
+  async register(dto: RegisterDto, remoteIp?: string): Promise<AuthResponse> {
+    await this.turnstileService.verify(dto.turnstileToken, 'cadastro', remoteIp);
     const existingUser = await this.usersService.findByEmail(dto.email);
 
     if (existingUser) {
@@ -37,7 +40,8 @@ export class AuthService {
     return this.createAuthResponse(user);
   }
 
-  async login(dto: LoginDto): Promise<AuthResponse> {
+  async login(dto: LoginDto, remoteIp?: string): Promise<AuthResponse> {
+    await this.turnstileService.verify(dto.turnstileToken, 'login', remoteIp);
     const user = await this.usersService.findByEmail(dto.email, true);
 
     if (!user || !(await compare(dto.password, user.passwordHash))) {

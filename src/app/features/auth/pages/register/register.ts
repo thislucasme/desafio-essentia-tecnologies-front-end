@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ViewChild, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AbstractControl,
@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth';
+import { Turnstile } from '../../../../shared/components/turnstile/turnstile';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   return control.get('password')?.value === control.get('confirmPassword')?.value
@@ -22,16 +23,26 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    Turnstile,
+  ],
   templateUrl: './register.html',
   styleUrl: '../auth-page.scss',
 })
 export class Register {
+  @ViewChild(Turnstile) private turnstile?: Turnstile;
+
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   readonly errorMessage = signal('');
   readonly isSubmitting = signal(false);
+  readonly turnstileToken = signal('');
 
   readonly form = new FormGroup(
     {
@@ -53,8 +64,12 @@ export class Register {
   );
 
   async submit(): Promise<void> {
-    if (this.form.invalid) {
+    if (this.form.invalid || !this.turnstileToken()) {
       this.form.markAllAsTouched();
+
+      if (!this.turnstileToken()) {
+        this.errorMessage.set('Conclua a verificação de segurança para criar sua conta.');
+      }
       return;
     }
 
@@ -62,10 +77,11 @@ export class Register {
     this.errorMessage.set('');
     const { name, email, password } = this.form.getRawValue();
     try {
-      await this.authService.register({ name, email, password });
+      await this.authService.register({ name, email, password }, this.turnstileToken());
       await this.router.navigate(['/']);
     } catch (error) {
       this.errorMessage.set(this.getErrorMessage(error));
+      this.turnstile?.reset();
     } finally {
       this.isSubmitting.set(false);
     }

@@ -1,0 +1,9 @@
+<div class="turnstile-shell">
+  <div #container class="turnstile-widget" aria-label="Verificação de segurança"></div>
+
+  @if (loadError()) {
+    <p role="alert">
+      Não foi possível carregar a verificação. Atualize a página e tente novamente.
+    </p>
+  }
+</div>

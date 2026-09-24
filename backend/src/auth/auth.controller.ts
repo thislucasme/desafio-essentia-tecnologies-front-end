@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -18,6 +18,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import type { Request } from 'express';
 
 @ApiTags('Autenticação')
 @Controller('auth')
@@ -29,8 +30,8 @@ export class AuthController {
   @ApiCreatedResponse({ description: 'Usuário cadastrado e autenticado.', type: AuthResponseDto })
   @ApiBadRequestResponse({ description: 'Dados de cadastro inválidos.', type: ErrorResponseDto })
   @ApiConflictResponse({ description: 'E-mail já cadastrado.', type: ErrorResponseDto })
-  register(@Body() dto: RegisterDto) {
-    return this.authService.register(dto);
+  register(@Body() dto: RegisterDto, @Req() request: Request) {
+    return this.authService.register(dto, request.ip);
   }
 
   @Post('login')
@@ -39,8 +40,8 @@ export class AuthController {
   @ApiOkResponse({ description: 'Login realizado com sucesso.', type: AuthResponseDto })
   @ApiBadRequestResponse({ description: 'Dados de login inválidos.', type: ErrorResponseDto })
   @ApiUnauthorizedResponse({ description: 'E-mail ou senha incorretos.', type: ErrorResponseDto })
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  login(@Body() dto: LoginDto, @Req() request: Request) {
+    return this.authService.login(dto, request.ip);
   }
 
   @Get('perfil')

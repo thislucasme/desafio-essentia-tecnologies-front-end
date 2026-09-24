@@ -30,18 +30,19 @@ export class AuthService {
   readonly currentUser = this.currentUserState.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserState() !== null);
 
-  async register(data: RegisterData): Promise<void> {
+  async register(data: RegisterData, turnstileToken: string): Promise<void> {
     const response = await firstValueFrom(
-      this.http.post<AuthResponse>(`${API_URL}/auth/cadastro`, data),
+      this.http.post<AuthResponse>(`${API_URL}/auth/cadastro`, { ...data, turnstileToken }),
     );
     this.startSession(response.user, response.accessToken);
   }
 
-  async login(email: string, password: string): Promise<void> {
+  async login(email: string, password: string, turnstileToken: string): Promise<void> {
     const response = await firstValueFrom(
       this.http.post<AuthResponse>(`${API_URL}/auth/login`, {
         email: email.trim().toLowerCase(),
         password,
+        turnstileToken,
       }),
     );
     this.startSession(response.user, response.accessToken);
