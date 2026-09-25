@@ -33,6 +33,118 @@ html {
   outline-offset: 3px;
 }
 
+// Padrão global dos campos Angular Material.
+.form-field-group {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-field-label {
+  color: #3b364c;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+  font-family: inherit;
+  --mdc-outlined-text-field-container-shape: 12px;
+  --mdc-outlined-text-field-focus-label-text-color: #6d28d9;
+  --mdc-outlined-text-field-label-text-color: #716b80;
+  --mdc-outlined-text-field-input-text-color: #29253a;
+  --mdc-outlined-text-field-input-text-placeholder-color: #9a94a7;
+  --mdc-outlined-text-field-error-focus-label-text-color: #b42318;
+  --mat-form-field-container-height: 52px;
+  --mat-form-field-container-vertical-padding: 14px;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  min-height: 52px;
+  background: #f7f5fc;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  box-shadow: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+// O Material divide o outline em três partes. Elas são removidas para que
+// somente a borda do container acima controle os estados visuais.
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__notch,
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+  border: 0 !important;
+}
+
+.mat-mdc-form-field:not(.mat-form-field-invalid):hover
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  background: #f5f2fc;
+  border-color: #e4ddf5;
+}
+
+.mat-mdc-form-field.mat-focused:not(.mat-form-field-invalid)
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  background: #ffffff;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgb(124 58 237 / 10%);
+}
+
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  border-color: #dc9898;
+}
+
+.mat-mdc-form-field.mat-focused.mat-form-field-invalid
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  background: #ffffff;
+  border-color: #cf5c5c;
+  box-shadow: 0 0 0 3px rgb(207 92 92 / 10%);
+}
+
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field .mat-mdc-select-value {
+  font: inherit;
+}
+
+.mat-mdc-form-field textarea.mat-mdc-input-element {
+  line-height: 1.55;
+}
+
+.mat-mdc-form-field .mat-icon[matprefix],
+.mat-mdc-form-field .mat-icon[matsuffix],
+.mat-mdc-form-field button[mat-icon-button] {
+  color: #777188;
+}
+
+.mat-mdc-form-field .mat-icon[matprefix] {
+  margin: 0 10px 0 2px;
+}
+
+.mat-mdc-form-field button[mat-icon-button] {
+  margin-right: 2px;
+}
+
+.mat-mdc-form-field .mat-mdc-form-field-hint,
+.mat-mdc-form-field .mat-mdc-form-field-error {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mat-mdc-form-field .mat-mdc-form-field-error {
+  color: #b42318;
+}
+
+.mat-mdc-select-panel {
+  background: #ffffff;
+  border: 1px solid #e8e5ef;
+  border-radius: 11px !important;
+  box-shadow: 0 16px 36px rgb(36 34 53 / 12%);
+}
+
 .task-dialog-panel .mat-mdc-dialog-surface {
   border-radius: 20px;
   box-shadow: 0 24px 70px rgb(45 38 91 / 20%);

@@ -23,63 +23,68 @@
 
 <mat-dialog-content>
   <form id="task-form" [formGroup]="form" (ngSubmit)="submit()">
-    <mat-form-field appearance="outline">
-      <mat-label>Título</mat-label>
+    <div class="form-field-group">
+      <label class="form-field-label" for="task-title">Título</label>
+      <mat-form-field appearance="outline">
+        <input
+          id="task-title"
+          matInput
+          formControlName="title"
+          placeholder="Ex: Estudar Angular"
+          maxlength="180"
+          autocomplete="off"
+          autofocus
+        />
 
-      <input
-        matInput
-        formControlName="title"
-        placeholder="Ex: Estudar Angular"
-        maxlength="180"
-        autocomplete="off"
-        autofocus
-      />
+        <mat-hint align="end">{{ form.controls.title.value.length }}/180</mat-hint>
 
-      <mat-hint align="end">{{ form.controls.title.value.length }}/180</mat-hint>
+        @if (form.controls.title.hasError('required')) {
+          <mat-error>O título é obrigatório.</mat-error>
+        } @else if (form.controls.title.hasError('maxlength')) {
+          <mat-error>O título deve ter no máximo 180 caracteres.</mat-error>
+        }
+      </mat-form-field>
+    </div>
 
-      @if (form.controls.title.hasError('required')) {
-        <mat-error>O título é obrigatório.</mat-error>
-      } @else if (form.controls.title.hasError('maxlength')) {
-        <mat-error>O título deve ter no máximo 180 caracteres.</mat-error>
-      }
-    </mat-form-field>
+    <div class="form-field-group">
+      <label class="form-field-label" for="task-description">Descrição</label>
+      <mat-form-field appearance="outline">
+        <textarea
+          id="task-description"
+          matInput
+          formControlName="description"
+          rows="5"
+          maxlength="2000"
+          placeholder="Adicione detalhes, contexto ou próximos passos"
+        ></textarea>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Descrição</mat-label>
+        <mat-hint>Opcional</mat-hint>
+        <mat-hint align="end">{{ form.controls.description.value.length }}/2000</mat-hint>
 
-      <textarea
-        matInput
-        formControlName="description"
-        rows="5"
-        maxlength="2000"
-        placeholder="Adicione detalhes, contexto ou próximos passos"
-      ></textarea>
+        @if (form.controls.description.hasError('maxlength')) {
+          <mat-error>A descrição deve ter no máximo 2.000 caracteres.</mat-error>
+        }
+      </mat-form-field>
+    </div>
 
-      <mat-hint>Opcional</mat-hint>
-      <mat-hint align="end">{{ form.controls.description.value.length }}/2000</mat-hint>
+    <div class="form-field-group">
+      <label id="task-status-label" class="form-field-label">Status</label>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="status" aria-labelledby="task-status-label">
+          <mat-option value="PENDING">
+            <span class="status-option"><span class="status-dot pending"></span>Pendente</span>
+          </mat-option>
 
-      @if (form.controls.description.hasError('maxlength')) {
-        <mat-error>A descrição deve ter no máximo 2.000 caracteres.</mat-error>
-      }
-    </mat-form-field>
+          <mat-option value="IN_PROGRESS">
+            <span class="status-option"><span class="status-dot progress"></span>Em andamento</span>
+          </mat-option>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Status</mat-label>
-
-      <mat-select formControlName="status">
-        <mat-option value="PENDING">
-          <span class="status-option"><span class="status-dot pending"></span>Pendente</span>
-        </mat-option>
-
-        <mat-option value="IN_PROGRESS">
-          <span class="status-option"><span class="status-dot progress"></span>Em andamento</span>
-        </mat-option>
-
-        <mat-option value="DONE">
-          <span class="status-option"><span class="status-dot done"></span>Concluída</span>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+          <mat-option value="DONE">
+            <span class="status-option"><span class="status-dot done"></span>Concluída</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </form>
 
   @if (errorMessage()) {

@@ -47,6 +47,7 @@ export class Register {
   readonly turnstileToken = signal('');
   readonly hidePassword = signal(true);
   readonly hideConfirmation = signal(true);
+  readonly step = signal<1 | 2>(1);
 
   readonly form = new FormGroup(
     {
@@ -66,6 +67,25 @@ export class Register {
     },
     { validators: passwordsMatch },
   );
+
+  continueToSecurity(): void {
+    const { name, email } = this.form.controls;
+    name.markAsTouched();
+    email.markAsTouched();
+
+    if (name.invalid || email.invalid) {
+      return;
+    }
+
+    this.errorMessage.set('');
+    this.step.set(2);
+  }
+
+  backToDetails(): void {
+    this.turnstileToken.set('');
+    this.errorMessage.set('');
+    this.step.set(1);
+  }
 
   async submit(): Promise<void> {
     if (this.form.invalid || !this.turnstileToken()) {

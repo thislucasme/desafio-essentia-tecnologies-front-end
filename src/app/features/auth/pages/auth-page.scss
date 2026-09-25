@@ -185,8 +185,18 @@
   box-shadow: 0 20px 60px rgb(36 34 53 / 10%);
 }
 
+@media (min-width: 841px) and (min-height: 960px) {
+  .auth-page-register .auth-panel {
+    transform: translateY(-40px);
+  }
+}
+
 .form-heading {
   margin-bottom: 28px;
+}
+
+.auth-page-register .form-heading {
+  margin-bottom: 20px;
 }
 
 .form-heading h2 {
@@ -218,23 +228,61 @@ form {
   gap: 8px;
 }
 
-mat-form-field {
-  width: 100%;
-  --mdc-outlined-text-field-container-shape: 12px;
-  --mdc-outlined-text-field-focus-outline-color: #6d28d9;
-  --mdc-outlined-text-field-focus-label-text-color: #6d28d9;
-  --mdc-outlined-text-field-hover-outline-color: #8b84a0;
-  --mdc-outlined-text-field-outline-color: #d7d3df;
+.step-indicator {
+  position: relative;
+  display: grid;
+  margin: 0 0 24px;
+  padding: 0;
+  grid-template-columns: 1fr 1fr;
+  list-style: none;
 }
 
-mat-form-field mat-icon[matprefix] {
-  margin: 0 10px 0 2px;
+.step-indicator::before {
+  position: absolute;
+  top: 14px;
+  right: 25%;
+  left: 25%;
+  height: 1px;
+  background: #e5e0ef;
+  content: '';
+}
+
+.step-indicator li {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: #8a8497;
+  flex-direction: column;
+}
+
+.step-indicator span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
   color: #777188;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f1eef7;
+  border-radius: 50%;
 }
 
-mat-form-field button[mat-icon-button] {
-  margin-right: 2px;
-  color: #6d687d;
+.step-indicator small {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.step-indicator li.active,
+.step-indicator li.completed {
+  color: #5b21b6;
+}
+
+.step-indicator li.active span,
+.step-indicator li.completed span {
+  color: #ffffff;
+  background: #7c3aed;
 }
 
 .password-row {
@@ -276,6 +324,23 @@ app-turnstile {
 
 .submit-button:not(:disabled):hover {
   --mdc-filled-button-container-color: #5b21b6;
+}
+
+.register-actions {
+  display: grid;
+  gap: 10px;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+}
+
+.register-actions .submit-button {
+  margin-top: 0;
+}
+
+.back-button {
+  min-height: 48px;
+  color: #6255c4;
+  font-weight: 600;
 }
 
 .button-spinner {
