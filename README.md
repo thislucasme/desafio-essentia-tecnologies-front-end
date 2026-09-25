@@ -1,17 +1,17 @@
-# ✅ Desafio Essentia Tecnologies
+# Desafio Essentia Tecnologies
 
 Aplicação **Full Stack de gerenciamento de tarefas**, desenvolvida como desafio técnico utilizando Angular, NestJS e MySQL.
 
 A aplicação possui autenticação de usuários, proteção de rotas, isolamento das tarefas por usuário, proteção contra requisições automatizadas com Cloudflare Turnstile e documentação interativa da API.
 
-## 🔗 Links
+## Links
 
-- 🚀 **Demo:** https://desafio-essentia-tecnologies-front.vercel.app/
-- 📚 **Swagger:** https://desafioessentiatecnologies.duckdns.org:4178/api/docs
+- **Demo:** https://desafio-essentia-tecnologies-front.vercel.app/
+- **Swagger:** https://desafioessentiatecnologies.duckdns.org:4178/api/docs
 
 ---
 
-## 🚀 Tecnologias
+## Tecnologias
 
 ### Frontend
 
@@ -39,7 +39,7 @@ A aplicação possui autenticação de usuários, proteção de rotas, isolament
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - Cadastro de usuários
 - Login com autenticação JWT
@@ -56,7 +56,7 @@ A aplicação possui autenticação de usuários, proteção de rotas, isolament
 
 ---
 
-## 📦 Como executar localmente
+## Como executar localmente
 
 ### 1. Instale as dependências
 
@@ -72,8 +72,6 @@ Depois instale as dependências do backend:
 cd backend
 npm install
 ```
-
----
 
 ### 2. Configure o backend
 
@@ -106,8 +104,6 @@ TURNSTILE_SECRET_KEY=coloque-o-secret-do-turnstile
 > [!IMPORTANT]
 > O arquivo `.env` contém informações sensíveis e não deve ser enviado ao Git.
 
----
-
 ### 3. Inicie o banco de dados
 
 Na pasta `backend`:
@@ -115,8 +111,6 @@ Na pasta `backend`:
 ```bash
 docker compose up -d mysql
 ```
-
----
 
 ### 4. Inicie o backend
 
@@ -130,8 +124,6 @@ O backend estará disponível em:
 
 - **API:** http://localhost:3008/api
 - **Swagger:** http://localhost:3008/api/docs
-
----
 
 ### 5. Inicie o frontend
 
@@ -149,7 +141,7 @@ http://localhost:4200
 
 ---
 
-## ⚙️ Configuração do frontend
+## Configuração do frontend
 
 As configurações de ambiente do frontend estão localizadas em:
 
@@ -175,7 +167,7 @@ Para utilizar o Cloudflare Turnstile em ambiente local, adicione `localhost` aos
 
 ---
 
-## 🔐 Autenticação
+## Autenticação
 
 A API utiliza **JWT (JSON Web Token)** para autenticação dos usuários.
 
@@ -197,7 +189,7 @@ Authorization: Bearer SEU_TOKEN
 
 ---
 
-## 📝 Tarefas
+## Tarefas
 
 Todas as operações relacionadas às tarefas exigem autenticação.
 
@@ -213,11 +205,11 @@ Cada usuário possui acesso **exclusivamente às próprias tarefas**.
 
 ---
 
-## 📚 Documentação da API
+## Documentação da API
 
 A API possui documentação interativa utilizando **Swagger**.
 
-### Swagger em produção
+A documentação em produção está disponível em:
 
 https://desafioessentiatecnologies.duckdns.org:4178/api/docs
 
@@ -225,7 +217,7 @@ Através do Swagger é possível visualizar e testar os endpoints, parâmetros, 
 
 ---
 
-## 🌐 Deploy
+## Deploy
 
 ### Frontend
 
@@ -285,12 +277,12 @@ Utilizado para execução do banco de dados MySQL.
 
 ---
 
-## 🔒 HTTPS
+## HTTPS
 
 A API publicada está disponível através de HTTPS:
 
 ```text
-https://desafioessentiatecnologies.duckdns.org:4178
+https://desafioessentiatecnologias.duckdns.org:4178
 ```
 
 O certificado SSL foi emitido através do **Certbot + Let's Encrypt**, utilizando validação DNS.
@@ -300,7 +292,7 @@ O certificado SSL foi emitido através do **Certbot + Let's Encrypt**, utilizand
 
 ---
 
-## 🛡️ Segurança
+## Segurança
 
 A aplicação utiliza diferentes mecanismos para proteção da API e dos dados dos usuários:
 
@@ -314,8 +306,7 @@ A aplicação utiliza diferentes mecanismos para proteção da API e dos dados d
 
 ---
 
-
-### Backend
+## Testes e build
 
 Entre na pasta do backend:
 
@@ -337,7 +328,7 @@ npm run build
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 De forma simplificada, a aplicação segue a seguinte arquitetura:
 
@@ -370,7 +361,7 @@ De forma simplificada, a aplicação segue a seguinte arquitetura:
 
 ---
 
-## 🔄 Fluxo de autenticação
+## Fluxo de autenticação
 
 ```text
 Usuário
@@ -400,7 +391,7 @@ NestJS
 
 ---
 
-## 📁 Estrutura geral
+## Estrutura geral
 
 ```text
 Frontend
@@ -429,15 +420,3 @@ Deploy
 ├── Frontend → Vercel
 └── Backend  → VPS
 ```
-
----
-
-## 🔗 Links do projeto
-
-### 🚀 Aplicação
-
-https://desafio-essentia-tecnologies-front.vercel.app/
-
-### 📚 Swagger
-
-https://desafioessentiatecnologies.duckdns.org:4178/api/docs
