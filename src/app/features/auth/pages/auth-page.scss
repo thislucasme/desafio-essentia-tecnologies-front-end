@@ -22,18 +22,6 @@
     radial-gradient(circle at 88% 15%, rgb(167 139 250 / 14%), transparent 28%), #f3f0ff;
 }
 
-.brand-lockup {
-  position: relative;
-  z-index: 2;
-}
-
-.brand-lockup img {
-  display: block;
-  width: 158px;
-  height: auto;
-  object-fit: contain;
-}
-
 .showcase-content {
   position: relative;
   z-index: 2;
@@ -414,10 +402,6 @@ app-turnstile {
     margin-bottom: 28px;
   }
 
-  .mobile-intro .brand-lockup {
-    margin-bottom: 26px;
-  }
-
   .mobile-intro h1 {
     font-size: 30px;
     line-height: 1.15;
@@ -441,10 +425,6 @@ app-turnstile {
 
   .mobile-intro h1 {
     font-size: 27px;
-  }
-
-  .brand-lockup img {
-    width: 145px;
   }
 }
 
