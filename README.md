@@ -314,21 +314,6 @@ A aplicação utiliza diferentes mecanismos para proteção da API e dos dados d
 
 ---
 
-## 🧪 Testes e build
-
-### Frontend
-
-Para executar os testes:
-
-```bash
-npm test -- --watch=false
-```
-
-Para gerar o build de produção:
-
-```bash
-npm run build
-```
 
 ### Backend
 
